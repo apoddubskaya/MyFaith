@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MainActivityButtonStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:padding">@dimen/main_activity_button_padding</item>
+        <item name="cornerRadius">@dimen/main_activity_button_corner_radius</item>
+    </style>
+
+    <style name="MainActivityBottomNavigationStyle" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="fontFamily">@font/ubuntu_condensed</item>
+    </style>
+</resources>

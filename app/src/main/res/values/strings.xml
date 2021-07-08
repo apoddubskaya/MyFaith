@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">МояВера</string>
+    <string name="bottom_nav_map_text">карта</string>
+    <string name="bottom_nav_list_text">список</string>
+    <string name="bottom_nav_favorites_text">избранное</string>
+    <string name="bottom_nav_prayers_text">молитвы</string>
+    <string name="bottom_nav_calendar_text">календарь</string>
+    <string name="toolbar_list_text">список церквей</string>
+    <string name="toolbar_map_text">карта церквей</string>
+    <string name="toolbar_favorites_text">Избранное</string>
+    <string name="toolbar_calendar_text">Календарь</string>
+    <string name="toolbar_prayers_text">список молитв</string>
+    <string name="search_results_not_found">Ничего не найдено</string>
+</resources>

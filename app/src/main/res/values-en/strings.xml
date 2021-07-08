@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MyFaith</string>
+    <string name="bottom_nav_map_text">map</string>
+    <string name="bottom_nav_list_text">catalog</string>
+    <string name="bottom_nav_favorites_text">favorites</string>
+    <string name="bottom_nav_prayers_text">prayers</string>
+    <string name="bottom_nav_calendar_text">calendar</string>
+    <string name="toolbar_list_text">list of churches</string>
+    <string name="toolbar_map_text">map of churches</string>
+    <string name="toolbar_favorites_text">favorites</string>
+    <string name="toolbar_calendar_text">calendar</string>
+    <string name="toolbar_prayers_text">list of prayers</string>
+    <string name="search_results_not_found">Nothing found</string>
+</resources>
