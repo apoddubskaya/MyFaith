@@ -19,7 +19,14 @@ class ListRecyclerViewAdapter(
         private val values: List<ChurchModel.Church>,
         private var valuesFiltered: List<ChurchModel.Church> = values,
         private val onItemClicked: (Int) -> Unit)
-    : RecyclerView.Adapter<ListRecyclerViewAdapter.ViewHolder>(), Filterable {
+    : RecyclerView.Adapter<ListRecyclerViewAdapter.ViewHolder>() {
+
+    fun updateValues(newValues: List<ChurchModel.Church>) {
+        if (newValues.isEmpty())
+            Toast.makeText(context, "Объекты не найдены", Toast.LENGTH_LONG).show()
+        valuesFiltered = newValues
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -52,35 +59,5 @@ class ListRecyclerViewAdapter(
                 icon.setImageDrawable(resources.getDrawable(drawableId, context.theme))
             }
         }
-    }
-
-    override fun getFilter(): Filter = object: Filter() {
-        override fun performFiltering(p0: CharSequence?): FilterResults {
-            val results = FilterResults()
-
-            if (p0 == null || p0.isEmpty()) {
-                results.count = values.size
-                results.values = values
-            }
-            else {
-                val valuesFilter = mutableListOf<ChurchModel.Church>()
-                for (item in values)
-                    if (item.name.toLowerCase().contains(p0.toString().toLowerCase()))
-                        valuesFilter.add(item)
-                results.count = valuesFilter.size
-                results.values = valuesFilter
-            }
-            return results
-        }
-
-        override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
-            valuesFiltered = p1?.values as List<ChurchModel.Church>? ?: listOf()
-            notifyDataSetChanged()
-            if (valuesFiltered.isEmpty()) {
-                Toast.makeText(context, "Объекты не найдены", Toast.LENGTH_LONG).show()
-                Log.d("ADAPTER", "empty results(((((")
-            }
-        }
-
     }
 }

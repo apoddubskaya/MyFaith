@@ -11,4 +11,14 @@ class ListFragmentPresenter(val view: IListFragment) {
     fun itemClickHandler(position: Int) {
         view.openChurchActivity(position)
     }
+    fun onQueryTextChangeHandler(query: String?) {
+        val mlist = mutableListOf<ChurchModel.Church>()
+        if (query == null || query.isEmpty())
+            mlist.addAll(churchModel.ITEMS)
+        else
+            for (item in churchModel.ITEMS)
+                if (item.name.toLowerCase().contains(query.toLowerCase()))
+                    mlist.add(item)
+        view.changeData(mlist)
+    }
 }

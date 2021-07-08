@@ -19,17 +19,17 @@ import com.example.myfaith.view.interfaces.IListFragment
  */
 class ListFragment : Fragment(), IListFragment {
     private lateinit var binding: FragmentListBinding
-    private lateinit var preseter: ListFragmentPresenter
+    private lateinit var presenter: ListFragmentPresenter
     private lateinit var searchMenuItem: MenuItem
     private lateinit var adapter: ListRecyclerViewAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        preseter = ListFragmentPresenter(this)
+        presenter = ListFragmentPresenter(this)
         binding = FragmentListBinding.inflate(inflater, container, false)
         searchMenuItem  = binding.listFragmentToolbar.menu.findItem(R.id.list_fragment_search_item)
         val view = binding.root
-        preseter.onCreateHandler()
+        presenter.onCreateHandler()
         val searchView = searchMenuItem.actionView as SearchView
         searchView.setOnQueryTextListener(
                 object: SearchView.OnQueryTextListener {
@@ -38,16 +38,7 @@ class ListFragment : Fragment(), IListFragment {
                     }
 
                     override fun onQueryTextChange(newText: String?): Boolean {
-                        adapter.filter.filter(newText)
-                        if (adapter.itemCount == 0) {
-                            Log.d("LISTFRAGMENT", "empty results(((((")
-                            binding.textviewResultsNotFound.visibility = View.VISIBLE
-                            binding.list.visibility = View.GONE
-                        }
-                        else {
-                            binding.textviewResultsNotFound.visibility = View.GONE
-                            binding.list.visibility = View.VISIBLE
-                        }
+                        presenter.onQueryTextChangeHandler(newText)
                         return false
                     }
                 }
@@ -66,9 +57,9 @@ class ListFragment : Fragment(), IListFragment {
         } else false
     }
 
-    override fun showChurchesList(items: ArrayList<ChurchModel.Church>) {
+    override fun showChurchesList(items: List<ChurchModel.Church>) {
         adapter = ListRecyclerViewAdapter(getApplicationContext(), items) {
-            preseter.itemClickHandler(it)
+            presenter.itemClickHandler(it)
         }
         binding.list.adapter = adapter
     }
@@ -81,4 +72,16 @@ class ListFragment : Fragment(), IListFragment {
     }
 
     override fun getApplicationContext(): Context = requireActivity().applicationContext
+
+    override fun changeData(newData: List<ChurchModel.Church>) {
+        if (newData.isEmpty()) {
+            binding.textviewResultsNotFound.visibility = View.VISIBLE
+            binding.list.visibility = View.GONE
+        }
+        else {
+            adapter.updateValues(newData)
+            binding.list.visibility = View.VISIBLE
+            binding.textviewResultsNotFound.visibility = View.GONE
+        }
+    }
 }
