@@ -25,8 +25,15 @@ class ListFragment : Fragment(), IListFragment {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        presenter = ListFragmentPresenter(this)
+        val isDataFavorites = arguments?.getBoolean("isDataFavorites", false) ?: false
+        presenter = ListFragmentPresenter(this, isDataFavorites)
         binding = FragmentListBinding.inflate(inflater, container, false)
+
+        if (isDataFavorites)
+            binding.listFragmentToolbarText.text = resources.getString(
+                    R.string.toolbar_favorites_text
+            )
+        setAdapter()
         searchMenuItem  = binding.listFragmentToolbar.menu.findItem(R.id.list_fragment_search_item)
         val view = binding.root
         presenter.onCreateHandler()
@@ -57,8 +64,8 @@ class ListFragment : Fragment(), IListFragment {
         } else false
     }
 
-    override fun showChurchesList(items: List<ChurchModel.Church>) {
-        adapter = ListRecyclerViewAdapter(getApplicationContext(), items) {
+    private fun setAdapter() {
+        adapter = ListRecyclerViewAdapter(getApplicationContext(), listOf()) {
             presenter.itemClickHandler(it)
         }
         binding.list.adapter = adapter
@@ -73,13 +80,13 @@ class ListFragment : Fragment(), IListFragment {
 
     override fun getApplicationContext(): Context = requireActivity().applicationContext
 
-    override fun changeData(newData: List<ChurchModel.Church>) {
-        if (newData.isEmpty()) {
+    override fun setData(data: List<ChurchModel.Church>) {
+        if (data.isEmpty()) {
             binding.textviewResultsNotFound.visibility = View.VISIBLE
             binding.list.visibility = View.GONE
         }
         else {
-            adapter.updateValues(newData)
+            adapter.updateValues(data)
             binding.list.visibility = View.VISIBLE
             binding.textviewResultsNotFound.visibility = View.GONE
         }

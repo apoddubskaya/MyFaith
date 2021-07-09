@@ -14,6 +14,11 @@ class ChurchModel(resources: Resources) {
         ITEMS = Gson().fromJson<ArrayList<Church>>(reader, typeToken)
     }
 
+    fun getListData(isDataFavoritesFlag: Boolean): List<Church> {
+        return if (isDataFavoritesFlag) listOf(ITEMS[0], ITEMS[1], ITEMS[2])
+        else ITEMS
+    }
+
     data class Church(
             val name: String,
             val adress: String,

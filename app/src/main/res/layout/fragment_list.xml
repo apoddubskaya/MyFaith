@@ -20,6 +20,7 @@
                 app:popupTheme="@style/Widget.AppCompat.PopupWindow">
 
                 <TextView
+                    android:id="@+id/list_fragment_toolbar_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

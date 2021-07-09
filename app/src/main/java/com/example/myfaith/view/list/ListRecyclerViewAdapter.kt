@@ -22,8 +22,6 @@ class ListRecyclerViewAdapter(
     : RecyclerView.Adapter<ListRecyclerViewAdapter.ViewHolder>() {
 
     fun updateValues(newValues: List<ChurchModel.Church>) {
-        if (newValues.isEmpty())
-            Toast.makeText(context, "Объекты не найдены", Toast.LENGTH_LONG).show()
         valuesFiltered = newValues
         notifyDataSetChanged()
     }

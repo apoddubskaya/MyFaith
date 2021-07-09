@@ -54,11 +54,19 @@ class MainActivity : AppCompatActivity(), IMainActivity {
     }
 
     override fun openList() {
-        replaceFragment(ListFragment())
+        replaceFragment(ListFragment().apply {
+            arguments = Bundle().apply {
+                putBoolean("isDataFavorites", false)
+            }
+        })
     }
 
     override fun openFavorites() {
-        replaceFragment(FavoritesFragment())
+        replaceFragment(ListFragment().apply {
+            arguments = Bundle().apply {
+                putBoolean("isDataFavorites", true)
+            }
+        })
     }
 
     override fun openPrayers() {
