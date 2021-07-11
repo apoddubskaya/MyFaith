@@ -31,16 +31,29 @@
             </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <TextView
-        android:id="@+id/textview_results_not_found"
+    <LinearLayout
+        android:id="@+id/results_not_found"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:gravity="center_horizontal"
-        android:text="@string/search_results_not_found"
-        android:textSize="22sp"
+        android:layout_marginTop="24dp"
+        android:orientation="vertical"
         android:visibility="gone"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:gravity="center_horizontal"
+            android:src="@drawable/emoji_results_not_found" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/search_results_not_found"
+            android:textSize="22sp" />
+    </LinearLayout>
+
 
     <androidx.core.widget.NestedScrollView
         android:layout_height="match_parent"

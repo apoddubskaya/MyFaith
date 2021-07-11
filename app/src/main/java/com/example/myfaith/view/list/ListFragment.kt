@@ -28,15 +28,12 @@ class ListFragment : Fragment(), IListFragment {
         val isDataFavorites = arguments?.getBoolean("isDataFavorites", false) ?: false
         presenter = ListFragmentPresenter(this, isDataFavorites)
         binding = FragmentListBinding.inflate(inflater, container, false)
-
         if (isDataFavorites)
             binding.listFragmentToolbarText.text = resources.getString(
                     R.string.toolbar_favorites_text
             )
         setAdapter()
         searchMenuItem  = binding.listFragmentToolbar.menu.findItem(R.id.list_fragment_search_item)
-        val view = binding.root
-        presenter.onCreateHandler()
         val searchView = searchMenuItem.actionView as SearchView
         searchView.setOnQueryTextListener(
                 object: SearchView.OnQueryTextListener {
@@ -55,7 +52,12 @@ class ListFragment : Fragment(), IListFragment {
             searchView.clearFocus()
             false
         }
-        return view
+        return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        presenter.onStartHandler()
     }
 
     fun onBackPressed(): Boolean {
@@ -65,30 +67,37 @@ class ListFragment : Fragment(), IListFragment {
     }
 
     private fun setAdapter() {
-        adapter = ListRecyclerViewAdapter(getApplicationContext(), listOf()) {
-            presenter.itemClickHandler(it)
-        }
+        Log.d("LISTFRAGMENT", "new adapter!!!!!")
+        adapter = ListRecyclerViewAdapter(
+                listOf(), 
+                { presenter.itemClickHandler(it) },
+                { id, isClicked -> presenter.onFavBtnCheckedChangeHandler(id, isClicked)}
+        )
         binding.list.adapter = adapter
     }
 
-    override fun openChurchActivity(position: Int) {
+    override fun openChurchActivity(id: Int) {
         val intent = Intent(requireContext(), ChurchActivity::class.java).apply {
-            putExtra(ChurchActivity.CHURCH_POSITION_EXTRA_NAME, position)
+            putExtra(ChurchActivity.CHURCH_ID_EXTRA_NAME, id)
         }
         startActivity(intent)
     }
 
     override fun getApplicationContext(): Context = requireActivity().applicationContext
 
-    override fun setData(data: List<ChurchModel.Church>) {
+    override fun setData(data: MutableList<ChurchModel.ChurchListElement>) {
         if (data.isEmpty()) {
-            binding.textviewResultsNotFound.visibility = View.VISIBLE
+            binding.resultsNotFound.visibility = View.VISIBLE
             binding.list.visibility = View.GONE
         }
         else {
             adapter.updateValues(data)
             binding.list.visibility = View.VISIBLE
-            binding.textviewResultsNotFound.visibility = View.GONE
+            binding.resultsNotFound.visibility = View.GONE
         }
+    }
+
+    override fun removeAtPosition(position: Int) {
+        adapter.removeAtPosition(position)
     }
 }

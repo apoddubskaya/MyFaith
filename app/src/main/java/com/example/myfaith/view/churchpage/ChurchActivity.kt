@@ -2,6 +2,7 @@ package com.example.myfaith.view.churchpage
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.example.myfaith.R
 import com.example.myfaith.databinding.ActivityChurchBinding
 import com.example.myfaith.model.ChurchModel
@@ -12,18 +13,18 @@ class ChurchActivity : AppCompatActivity(), IChurchActivity {
     private lateinit var binding: ActivityChurchBinding
     private lateinit var presenter: ChurchActivityPresenter
     companion object {
-        const val CHURCH_POSITION_EXTRA_NAME = "church_position"
+        const val CHURCH_ID_EXTRA_NAME = "church_id"
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChurchBinding.inflate(layoutInflater)
         val view = binding.root
         presenter = ChurchActivityPresenter(this)
-        presenter.onCreateHandler(intent.getIntExtra(CHURCH_POSITION_EXTRA_NAME, -1))
+        presenter.onCreateHandler(intent.getIntExtra(CHURCH_ID_EXTRA_NAME, -1))
         setContentView(view)
     }
 
-    override fun setData(church: ChurchModel.Church) {
+    override fun setData(church: ChurchModel.ChurchPageElement) {
         binding.churchActivityViewpager.adapter = ChurchImagesRecyclerViewAdapter(
                 church.pictures
         )
@@ -53,6 +54,10 @@ class ChurchActivity : AppCompatActivity(), IChurchActivity {
                 church.phone
         )
 
+    }
+
+    override fun errorHappend() {
+        Toast.makeText(applicationContext, R.string.error, Toast.LENGTH_LONG)
     }
 
     private fun prepareKeyValueString(key: String, value: String) = "$key:\n$value"

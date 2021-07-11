@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.myfaith.model.ChurchModel
 
 interface IChurchActivity {
-    fun setData(church: ChurchModel.Church)
+    fun setData(church: ChurchModel.ChurchPageElement)
+    fun errorHappend()
     fun getApplicationContext(): Context
 }

@@ -1,25 +1,21 @@
 package com.example.myfaith.presenter
 
+import android.util.Log
 import com.example.myfaith.model.ChurchModel
 import com.example.myfaith.view.interfaces.IListFragment
 
 class ListFragmentPresenter(val view: IListFragment, private val isDataFavoritesFlag: Boolean) {
 
     private var churchModel: ChurchModel = ChurchModel(view.getApplicationContext().resources)
+    private var lastQuery = ""
 
     private fun updateList(query: String? = null) {
-        val mlist = mutableListOf<ChurchModel.Church>()
-        val baseData = churchModel.getListData(isDataFavoritesFlag)
-        if (query == null || query.isEmpty())
-            mlist.addAll(baseData)
-        else
-            for (item in baseData)
-                if (item.name.toLowerCase().contains(query.toLowerCase()))
-                    mlist.add(item)
-        view.setData(mlist)
+        if (query != null)
+            lastQuery = query
+        view.setData(churchModel.getListData(isDataFavoritesFlag, lastQuery))
     }
 
-    fun onCreateHandler() {
+    fun onStartHandler() {
         updateList()
     }
 
@@ -27,7 +23,19 @@ class ListFragmentPresenter(val view: IListFragment, private val isDataFavorites
         updateList(query)
     }
 
-    fun itemClickHandler(position: Int) {
-        view.openChurchActivity(position)
+    fun itemClickHandler(id: Int) {
+        view.openChurchActivity(id)
+    }
+
+    fun onFavBtnCheckedChangeHandler(id: Int, isChecked: Boolean) {
+        Log.d("LISTPRESENTER", "before   ${ChurchModel.favItems.size}")
+        if (isChecked) {
+            churchModel.addFavorite(id)
+        }
+        else {
+            churchModel.removeFavorite(id)
+            updateList()
+        }
+        Log.d("LISTPRESENTER", "after   ${ChurchModel.favItems.size}")
     }
 }

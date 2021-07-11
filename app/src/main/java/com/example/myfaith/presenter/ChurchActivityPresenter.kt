@@ -6,7 +6,10 @@ import com.example.myfaith.view.interfaces.IChurchActivity
 
 class ChurchActivityPresenter(val view: IChurchActivity) {
     private val churchModel = ChurchModel(view.getApplicationContext().resources)
-    fun onCreateHandler(position: Int) {
-        view.setData(churchModel.ITEMS[position])
+    fun onCreateHandler(id: Int) {
+        val churchPageElement = churchModel.getChurchPageElement(id)
+        if (churchPageElement != null)
+            view.setData(churchPageElement)
+        else view.errorHappend()
     }
 }
