@@ -1,26 +1,36 @@
 package com.example.myfaith.model
 
+import android.content.Context
 import android.content.res.Resources
 import com.example.myfaith.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.util.ArrayList
 
-class ChurchModel(resources: Resources) {
+
+class ChurchModel(context: Context) {
     companion object {
         var favItems = HashSet<Int>()
     }
-    var items: ArrayList<StaticChurch> = ArrayList()
-    var itemsHashMap = HashMap<Int, StaticChurch>()
+    private var items: ArrayList<StaticChurch> = ArrayList()
+    private var itemsHashMap = HashMap<Int, StaticChurch>()
+    private val favoriteDao = FavoriteDatabase.getInstance(context).favoriteDao()
+
     init {
-        val reader = resources.openRawResource(R.raw.churches).bufferedReader()
+        val reader = context.resources.openRawResource(R.raw.churches).bufferedReader()
         val typeToken = object : TypeToken<ArrayList<StaticChurch>>() {}.type
         items = Gson().fromJson<ArrayList<StaticChurch>>(reader, typeToken)
         for (item in items)
             itemsHashMap[item.id] = item
     }
 
-    private fun getFavorites() = favItems
+    private fun getFavorites(): HashSet<Int> {
+        val favSet = HashSet<Int>()
+        val favs = favoriteDao.getAll()
+        for (f in favs)
+            favSet.add(f.churchId)
+        return favSet
+    }
 
     private fun getFavoritesChurchListElements(): MutableList<ChurchListElement>{
         val mList = mutableListOf<ChurchListElement>()
@@ -70,11 +80,11 @@ class ChurchModel(resources: Resources) {
     }
 
     fun addFavorite(id: Int) {
-        favItems.add(id)
+        favoriteDao.insertFavorite(Favorite(id))
     }
 
     fun removeFavorite(id: Int) {
-        favItems.remove(id)
+        favoriteDao.deleteFavorite(Favorite(id))
     }
 
     fun getChurchPageElement(id: Int): ChurchPageElement? {

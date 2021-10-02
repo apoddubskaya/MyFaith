@@ -54,6 +54,12 @@ class ChurchActivity : AppCompatActivity(), IChurchActivity {
                 church.phone
         )
 
+        binding.churchActivityFavBtn.setOnCheckedChangeListener(null)
+        binding.churchActivityFavBtn.isChecked = church.isFavorite
+        binding.churchActivityFavBtn.setOnCheckedChangeListener {
+            _, isChecked -> presenter.onFavBtnCheckedChangeHandler(church.id, isChecked)
+        }
+
     }
 
     override fun errorHappend() {
